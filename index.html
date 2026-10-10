@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ชำระเงิน ร้านวาริ</title>
+<style>[hidden]{display:none!important}body{margin:0}</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Mali:wght@600;700&display=swap">
+<style id="css">
+/* Layout: one narrow column on a lavender-pink-sky wash. Spinning CD music button pinned top right, symbols fall over the page. */
+:root {
+  --bg: #F1E8FF;
+  --bg-a: #EBDFFF;
+  --bg-b: #FFE3F2;
+  --bg-c: #DDF1FF;
+  --surface: #FFFFFF;
+  --field: #FAF6FF;
+  --ink: #2B1F4A;
+  --muted: #76679A;
+  --line: #E1D3F6;
+  --accent: #8A56E2;
+  --grad-a: #C7A6FF;
+  --grad-b: #FFB0DC;
+  --grad-c: #A6DEFF;
+  --on-grad: #2B1F4A;
+  --grad: linear-gradient(120deg, var(--grad-a), var(--grad-b) 55%, var(--grad-c));
+  --ok: #1B8A63;
+  --bad: #C2264B;
+  --line-green: #06C755;
+  --font-display: "Mali", "Sarabun", "Noto Sans Thai", sans-serif;
+  --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", "Sarabun", system-ui, sans-serif;
+  --font-symbol: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #150F28; --bg-a: #1A1233; --bg-b: #2A1233; --bg-c: #10223A;
+    --surface: #211838; --field: #1A1230; --ink: #F3EBFF; --muted: #B3A2D6;
+    --line: #3A2D5E; --accent: #B58CFF; --ok: #6EE0B0; --bad: #FF8FA3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #150F28; --bg-a: #1A1233; --bg-b: #2A1233; --bg-c: #10223A;
+  --surface: #211838; --field: #1A1230; --ink: #F3EBFF; --muted: #B3A2D6;
+  --line: #3A2D5E; --accent: #B58CFF; --ok: #6EE0B0; --bad: #FF8FA3;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg) linear-gradient(165deg, var(--bg-a) 0%, var(--bg-b) 55%, var(--bg-c) 100%) fixed; color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.6;
+  padding-inline: 16px; padding-block: 28px 40px;
+}
+.wrap { max-width: 480px; margin-inline: auto; display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 1; }
+header { padding-right: 76px; }
+.symbols { margin: 6px 0 0; font-family: var(--font-symbol); font-size: 1.25rem; letter-spacing: .35em; color: var(--accent); }
+h1, h2 { font-family: var(--font-display); margin: 0; text-wrap: balance; }
+h1 { font-size: 1.9rem; line-height: 1.2; }
+h2 { font-size: 1.1rem; }
+.sub { margin: 4px 0 0; color: var(--muted); font-size: .95rem; }
+.only {
+  display: flex; gap: 10px; align-items: center;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 12px 14px; font-weight: 500;
+}
+.only .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--grad); flex: none; }
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+  padding: 18px; display: flex; flex-direction: column; gap: 16px;
+}
+.qr {
+  width: 100%; max-width: 260px; aspect-ratio: 1 / 1; margin-inline: auto;
+  border: 2px dashed var(--line); border-radius: 14px; background: var(--field);
+  display: grid; place-items: center; text-align: center; color: var(--muted);
+  font-size: .9rem; padding: 12px; overflow: hidden;
+}
+.qr.has-img { aspect-ratio: auto; max-width: 300px; border: 0; padding: 0; background: transparent; border-radius: 16px; }
+.qr img { width: 100%; height: auto; display: block; border-radius: 16px; }
+.row {
+  display: flex; align-items: center; gap: 12px; min-width: 0;
+  border-top: 1px solid var(--line); padding-top: 14px;
+}
+.row:first-of-type { border-top: 0; padding-top: 0; }
+.row .txt { flex: 1; min-width: 0; }
+.label { font-size: .8rem; color: var(--muted); letter-spacing: .02em; }
+.value { font-size: 1.15rem; font-weight: 600; overflow-wrap: anywhere; }
+.value.num { font-size: 1.4rem; letter-spacing: .06em; font-variant-numeric: tabular-nums; }
+.icon-btn {
+  flex: none; width: 46px; height: 46px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--field); color: var(--ink);
+  display: grid; place-items: center; cursor: pointer;
+}
+.icon-btn:hover { border-color: var(--accent); }
+.icon-btn.done { color: var(--ok); border-color: var(--ok); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field label { font-weight: 500; font-size: .95rem; }
+input[type=text], input[type=number], input[type=datetime-local] {
+  width: 100%; min-width: 0; font: inherit; color: var(--ink);
+  background: var(--field); border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px 14px; min-height: 48px;
+}
+.hint { font-size: .85rem; color: var(--muted); margin: 0; }
+.err { color: var(--bad); font-size: .85rem; margin: 0; min-height: 1.2em; }
+.slip-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 52px; border-radius: 12px; border: 1.5px dashed var(--muted);
+  background: var(--field); color: var(--ink); font: inherit; font-weight: 500; cursor: pointer; width: 100%;
+}
+.slip-btn:hover { border-color: var(--accent); }
+.slip-preview { display: none; gap: 12px; align-items: flex-start; }
+.slip-preview.show { display: flex; }
+.slip-preview img { width: 84px; max-height: 150px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
+.slip-status { font-size: .9rem; margin: 0; }
+.slip-status.ok { color: var(--ok); }
+.slip-status.bad { color: var(--bad); }
+.slip-status.wait { color: var(--muted); }
+.confirm {
+  min-height: 54px; border: 0; border-radius: 14px; font: inherit; font-weight: 600; font-size: 1.05rem;
+  background: var(--grad); color: var(--on-grad); cursor: pointer; width: 100%;
+}
+.confirm:disabled { background: var(--line); color: var(--muted); cursor: not-allowed; }
+.done-box { display: none; flex-direction: column; gap: 12px; }
+.done-box.show { display: flex; }
+.code {
+  font-variant-numeric: tabular-nums; font-weight: 600; font-size: 1.2rem; letter-spacing: .06em;
+  background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; width: fit-content;
+}
+.ghost {
+  min-height: 46px; border-radius: 12px; border: 1px solid var(--line); background: transparent;
+  color: var(--ink); font: inherit; cursor: pointer; padding-inline: 16px; width: fit-content;
+}
+.line-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding-top: 4px; }
+.line-btn {
+  width: 64px; height: 64px; border-radius: 18px; background: var(--line-green);
+  display: grid; place-items: center; text-decoration: none;
+}
+.toast {
+  position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+  background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-size: .9rem;
+  opacity: 0; pointer-events: none; transition: opacity .2s; max-width: calc(100% - 32px);
+}
+.toast.show { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+
+/* falling symbols */
+.fall { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.drop { position: absolute; top: 0; line-height: 1; font-family: var(--font-symbol); color: var(--accent); animation-name: fall; animation-timing-function: linear; animation-fill-mode: forwards; will-change: transform; }
+@keyframes fall {
+  0% { transform: translate3d(0, -8vh, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: .9; }
+  90% { opacity: .9; }
+  100% { transform: translate3d(var(--sway, 0px), 108vh, 0) rotate(var(--spin, 0deg)); opacity: 0; }
+}
+/* CD music button */
+.cd-btn {
+  position: fixed; right: 16px; top: calc(16px + env(safe-area-inset-top, 0px)); z-index: 20;
+  width: 62px; height: 62px; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer;
+}
+.cd {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from 20deg, #C7A6FF, #FFB0DC, #A6DEFF, #FFFFFF, #C7A6FF, #FFB0DC, #A6DEFF, #FFFFFF, #C7A6FF);
+  box-shadow: 0 6px 16px rgba(138, 86, 226, .35), inset 0 0 0 2px rgba(255, 255, 255, .75);
+}
+.cd::before { content: ""; position: absolute; inset: 7%; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .55); }
+.cd::after { content: ""; position: absolute; inset: 35%; border-radius: 50%; background: var(--surface); box-shadow: 0 0 0 5px rgba(255, 255, 255, .45); }
+.cd.spin { animation: spin 3.2s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.cd-badge {
+  position: absolute; left: -6px; bottom: -4px; width: 24px; height: 24px; border-radius: 50%;
+  background: var(--surface); color: var(--accent); border: 1px solid var(--line);
+  display: grid; place-items: center;
+}
+.toast { z-index: 30; }
+@media (prefers-reduced-motion: reduce) { .cd.spin { animation: none; } .drop { display: none; } }
+
+.prices { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.prices li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-block: 10px; border-top: 1px solid var(--line); min-width: 0; }
+.prices li:first-child { border-top: 0; padding-top: 0; }
+.prices li:last-child { padding-bottom: 0; }
+.prices li > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.amt { font-weight: 600; font-size: 1.2rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.admin-rows { display: flex; flex-direction: column; gap: 10px; }
+.admin-row { display: grid; grid-template-columns: minmax(0, 1fr) 96px 46px; gap: 8px; align-items: center; }
+.admin-row .icon-btn { width: 46px; height: 46px; }
+.qr-preview { display: grid; place-items: center; min-height: 120px; max-width: 260px; margin-inline: auto; width: 100%; color: var(--muted); border: 2px dashed var(--line); border-radius: 14px; background: var(--field); padding: 8px; }
+.qr-preview img { width: 100%; height: auto; display: block; border-radius: 10px; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.admin-link { margin: 0; font-size: .9rem; }
+.stack { display: flex; flex-direction: column; gap: 20px; }
+input[type=password] { width: 100%; min-width: 0; font: inherit; color: var(--ink); background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; min-height: 48px; letter-spacing: .4em; font-size: 1.2rem; }
+.admin-link a { color: var(--accent); }
+body.admin-mode .fall, body.admin-mode .cd-btn { display: none; }
+</style>
+<template id="markup"><main class="wrap" id="customerView">
+  <header>
+    <h1>b3llowari.s</h1>
+    <p class="sub">ร้านวาริ · ช่องทางชำระเงิน</p>
+  </header>
+
+  <div class="only"><span class="dot" aria-hidden="true"></span>รับชำระผ่านทรูวอเล็ตเท่านั้น</div>
+
+  <section class="card" id="priceCard" aria-label="ราคา" hidden>
+    <h2>ราคา</h2>
+    <ul class="prices" id="priceList"></ul>
+  </section>
+
+  <section class="card" aria-label="บัญชีรับโอน">
+    <div class="qr" id="qrBox">
+      <span id="qrEmpty">พื้นที่สำหรับคิวอาร์โค้ด</span>
+    </div>
+
+    <div class="row">
+      <div class="txt">
+        <div class="label">ชื่อบัญชี</div>
+        <div class="value" id="accName">พีรพงษ์ เทียบตุด</div>
+      </div>
+      <button class="icon-btn" type="button" id="copyName" aria-label="คัดลอกชื่อบัญชี" data-copy="name"></button>
+    </div>
+    <div class="row">
+      <div class="txt">
+        <div class="label">เลขบัญชีทรูวอเล็ต</div>
+        <div class="value num" id="accNum">082 941 9418</div>
+      </div>
+      <button class="icon-btn" type="button" id="copyNum" aria-label="คัดลอกเลขบัญชี" data-copy="num"></button>
+    </div>
+  </section>
+
+  <section class="card" aria-label="แจ้งการโอน">
+    <h2>แจ้งการโอนเงิน</h2>
+
+    <div class="field">
+      <label for="fName">ชื่อในไลน์</label>
+      <input type="text" id="fName" autocomplete="name" placeholder="พิมพ์ชื่อที่ใช้ในไลน์">
+    </div>
+
+    <div class="field">
+      <label id="slipLabel">สลิปการโอน</label>
+      <input type="file" id="slipInput" accept="image/*" hidden>
+      <button class="slip-btn" type="button" id="slipBtn" aria-labelledby="slipLabel">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.4 11.1l-8.5 8.5a5.5 5.5 0 0 1-7.8-7.8l8.5-8.5a3.7 3.7 0 0 1 5.2 5.2l-8.5 8.5a1.8 1.8 0 0 1-2.6-2.6l7.8-7.8"/></svg>
+        <span id="slipBtnText">แนบสลิป</span>
+      </button>
+      <div class="slip-preview" id="slipPreview">
+        <img id="slipImg" alt="สลิปที่แนบ">
+        <p class="slip-status wait" id="slipStatus" role="status"></p>
+      </div>
+    </div>
+
+    <button class="confirm" type="button" id="confirmBtn" disabled>ยืนยัน</button>
+    <p class="hint" id="confirmHint">กรอกข้อมูลและแนบสลิปให้ครบ ปุ่มยืนยันจึงจะกดได้</p>
+
+    <div class="done-box" id="doneBox" role="status">
+      <h2>รับข้อมูลการโอนแล้ว</h2>
+      <p class="sub" id="doneSummary"></p>
+      <div class="code" id="doneCode"></div>
+      <p class="hint">ส่งสลิปและรหัสนี้ให้ร้านทางไลน์ด้านล่าง ร้านจะตรวจยอดกับรายการเข้าในทรูวอเล็ตก่อนยืนยันออเดอร์</p>
+      <button class="ghost" type="button" id="againBtn">แจ้งโอนรายการใหม่</button>
+    </div>
+  </section>
+
+  <div class="line-wrap">
+    <a class="line-btn" id="lineBtn" href="https://line.me/ti/p/aJePTtkqf0" target="_blank" rel="noopener" aria-label="ทักไลน์ร้านวาริ">
+      <svg width="40" height="40" viewBox="0 0 48 48" aria-hidden="true">
+        <path fill="#fff" d="M24 7C13.5 7 5 13.9 5 22.4c0 7.6 6.7 13.9 15.8 15.1.6.1 1.5.4 1.7 1 .2.5.1 1.3.1 1.8l-.3 1.7c-.1.5-.4 2 1.8 1.1 2.2-.9 11.7-6.9 16-11.8 3-3.2 4.4-6.5 4.4-9.9C45 13.9 34.5 7 24 7z"/>
+        <text x="24" y="26" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="11" fill="#06C755">LINE</text>
+      </svg>
+    </a>
+  </div>
+
+</main>
+
+
+<button class="cd-btn" type="button" id="cdBtn" aria-pressed="false" aria-label="เปิดเพลง">
+  <span class="cd" id="cd"></span>
+  <span class="cd-badge" id="cdBadge"></span>
+</button>
+<div class="fall" id="fall" aria-hidden="true"></div>
+<div class="toast" id="toast" role="status"></div></template>
+<div id="root"></div>
+<script src="config.js"></script>
+<script id="app">document.getElementById("root").appendChild(document.getElementById("markup").content.cloneNode(true));
+
+(function () {
+  // เปลี่ยนค่าตรงนี้เมื่อมีข้อมูลจริง
+  var LINE_URL = "https://line.me/ti/p/aJePTtkqf0";
+  var ACCOUNT = { name: "พีรพงษ์ เทียบตุด", number: "0829419418" };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var ICON_COPY = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2.5"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>';
+  var ICON_OK = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+
+  $("lineBtn").href = LINE_URL;
+
+  /* ---------- toast ---------- */
+  var toastTimer;
+  function toast(msg) {
+    var t = $("toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.classList.remove("show"); }, 1800);
+  }
+
+  /* ---------- copy buttons (icon only) ---------- */
+  function fallbackSelect(el) {
+    var r = document.createRange(); r.selectNodeContents(el);
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+  document.querySelectorAll(".icon-btn").forEach(function (btn) {
+    btn.innerHTML = ICON_COPY;
+    btn.addEventListener("click", function () {
+      var isNum = btn.dataset.copy === "num";
+      var text = isNum ? ACCOUNT.number : ACCOUNT.name;
+      var src = isNum ? $("accNum") : $("accName");
+      function ok() {
+        btn.classList.add("done"); btn.innerHTML = ICON_OK; toast("คัดลอกแล้ว");
+        setTimeout(function () { btn.classList.remove("done"); btn.innerHTML = ICON_COPY; }, 1600);
+      }
+      function fail() { fallbackSelect(src); toast("เลือกข้อความแล้ว กดคัดลอกที่เมนูได้เลย"); }
+      try {
+        navigator.clipboard.writeText(text).then(ok, fail);
+      } catch (e) { fail(); }
+    });
+  });
+
+  /* ---------- form state ---------- */
+  var slip = { ok: false, hash: null, dataUrl: null };
+  var fName = $("fName");
+
+  function pad(n) { return (n < 10 ? "0" : "") + n; }
+  function toLocalInput(d) {
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+  function validate() {
+    var ready = fName.value.trim().length > 0 && slip.ok;
+    $("confirmBtn").disabled = !ready;
+    $("confirmHint").style.display = ready ? "none" : "";
+  }
+  fName.addEventListener("input", validate);
+  fName.addEventListener("change", validate);
+
+  /* ---------- slip attach ---------- */
+  $("slipBtn").addEventListener("click", function () { $("slipInput").click(); });
+  $("slipInput").addEventListener("change", function () {
+    var file = this.files && this.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onerror = function () {
+      slip = { ok: false, hash: null, dataUrl: null };
+      $("slipPreview").classList.remove("show"); validate();
+    };
+    reader.onload = function () {
+      slip = { ok: true, hash: null, dataUrl: reader.result };
+      $("slipImg").src = reader.result;
+      $("slipStatus").className = "slip-status ok"; $("slipStatus").textContent = "แนบสลิปแล้ว";
+      $("slipPreview").classList.add("show");
+      $("slipBtnText").textContent = "เปลี่ยนสลิป";
+      validate();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  /* ---------- confirm ---------- */
+  function makeCode() {
+    var d = new Date();
+    var r = Math.floor(1000 + Math.random() * 9000);
+    return "WR-" + d.getFullYear().toString().slice(2) + pad(d.getMonth() + 1) + pad(d.getDate()) + "-" + r;
+  }
+  $("confirmBtn").addEventListener("click", function () {
+    if ($("confirmBtn").disabled) return;
+    $("doneSummary").textContent = fName.value.trim();
+    $("doneCode").textContent = makeCode();
+    $("doneBox").classList.add("show");
+    $("confirmBtn").disabled = true;
+    $("confirmBtn").textContent = "ยืนยันแล้ว";
+    $("confirmHint").style.display = "none";
+    [fName, $("slipBtn")].forEach(function (el) { el.disabled = true; });
+    $("doneBox").scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+
+  $("againBtn").addEventListener("click", function () {
+    fName.value = ""; fName.disabled = false;
+    $("slipBtn").disabled = false;
+    $("slipInput").value = "";
+    $("slipPreview").classList.remove("show");
+    $("slipBtnText").textContent = "แนบสลิป";
+    $("doneBox").classList.remove("show");
+    $("confirmBtn").textContent = "ยืนยัน";
+    slip = { ok: false, hash: null, dataUrl: null };
+    validate();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  validate();
+  /* ---------- falling symbols ---------- */
+  var GLYPHS = ["🍀", "⭐️"];
+  var fallBox = $("fall");
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function drop(spread) {
+    if (fallBox.childElementCount > 26) return;
+    var el = document.createElement("span");
+    el.className = "drop";
+    el.textContent = GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+    var dur = 9 + Math.random() * 7;
+    el.style.left = (Math.random() * 94) + "%";
+    el.style.fontSize = (16 + Math.random() * 16) + "px";
+    el.style.animationDuration = dur + "s";
+    if (spread) el.style.animationDelay = "-" + (Math.random() * dur * 0.9).toFixed(2) + "s";
+    el.style.setProperty("--sway", (Math.random() * 70 - 35).toFixed(0) + "px");
+    el.style.setProperty("--spin", (Math.random() * 360 - 180).toFixed(0) + "deg");
+    el.addEventListener("animationend", function () { el.remove(); });
+    fallBox.appendChild(el);
+  }
+  if (!reduceMotion) {
+    for (var i = 0; i < 12; i++) drop(true);
+    setInterval(function () { if (!document.hidden) drop(false); }, 750);
+  }
+
+  /* ---------- CD music (synthesized, no audio file) ---------- */
+  var ICON_PLAY = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+  var ICON_PAUSE = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>';
+  var cdBtn = $("cdBtn"), cd = $("cd"), cdBadge = $("cdBadge");
+  cdBadge.innerHTML = ICON_PLAY;
+
+  var CHORDS = [[60, 64, 67, 71], [57, 60, 64, 67], [53, 57, 60, 64], [55, 59, 62, 65]];
+  var ARP = [0, 1, 2, 3, 2, 1, 2, 3];
+  var STEP = 0.36;
+  var au = { ctx: null, master: null, timer: null, next: 0, step: 0, on: false };
+  function mtof(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+  function tone(t, midi, dur, vol, type) {
+    var o = au.ctx.createOscillator(), g = au.ctx.createGain();
+    o.type = type; o.frequency.value = mtof(midi);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.03);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(au.master);
+    o.start(t); o.stop(t + dur + 0.05);
+  }
+  function scheduleStep(t, n) {
+    var chord = CHORDS[Math.floor(n / 8) % CHORDS.length];
+    var pos = n % 8;
+    if (pos === 0) {
+      chord.forEach(function (m) { tone(t, m, STEP * 8, 0.035, "sine"); });
+    }
+    if (pos === 0 || pos === 4) tone(t, chord[0] - 12, STEP * 3.5, 0.11, "sine");
+    tone(t, chord[ARP[pos]] + 12, STEP * 2.2, 0.07, "triangle");
+    if (pos === 6) tone(t, chord[2] + 24, STEP * 1.5, 0.03, "sine");
+  }
+  function pump() {
+    while (au.next < au.ctx.currentTime + 0.4) {
+      scheduleStep(au.next, au.step);
+      au.next += STEP; au.step += 1;
+    }
+  }
+  function buildAudio() {
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return false;
+    au.ctx = new AC();
+    var filter = au.ctx.createBiquadFilter();
+    filter.type = "lowpass"; filter.frequency.value = 2400;
+    au.master = au.ctx.createGain();
+    au.master.gain.value = 0.0001;
+    var delay = au.ctx.createDelay(1.0); delay.delayTime.value = STEP * 1.5;
+    var fb = au.ctx.createGain(); fb.gain.value = 0.32;
+    var wet = au.ctx.createGain(); wet.gain.value = 0.35;
+    au.master.connect(filter);
+    filter.connect(au.ctx.destination);
+    filter.connect(delay); delay.connect(fb); fb.connect(delay); delay.connect(wet); wet.connect(au.ctx.destination);
+    return true;
+  }
+  function setPlaying(on) {
+    au.on = on;
+    cd.classList.toggle("spin", on);
+    cdBtn.setAttribute("aria-pressed", on ? "true" : "false");
+    cdBtn.setAttribute("aria-label", on ? "ปิดเพลง" : "เปิดเพลง");
+    cdBadge.innerHTML = on ? ICON_PAUSE : ICON_PLAY;
+  }
+  cdBtn.addEventListener("click", function () {
+    try {
+      if (!au.ctx && !buildAudio()) { toast("เบราว์เซอร์นี้เล่นเพลงไม่ได้"); return; }
+      if (!au.on) {
+        au.ctx.resume();
+        au.next = au.ctx.currentTime + 0.1; au.step = 0;
+        au.master.gain.cancelScheduledValues(au.ctx.currentTime);
+        au.master.gain.setValueAtTime(0.0001, au.ctx.currentTime);
+        au.master.gain.exponentialRampToValueAtTime(0.9, au.ctx.currentTime + 0.8);
+        pump(); au.timer = setInterval(pump, 120);
+        setPlaying(true); toast("เปิดเพลงแล้ว");
+      } else {
+        clearInterval(au.timer);
+        au.master.gain.cancelScheduledValues(au.ctx.currentTime);
+        au.master.gain.setValueAtTime(Math.max(au.master.gain.value, 0.0001), au.ctx.currentTime);
+        au.master.gain.exponentialRampToValueAtTime(0.0001, au.ctx.currentTime + 0.35);
+        setPlaying(false); toast("ปิดเพลงแล้ว");
+      }
+    } catch (e) { toast("เล่นเพลงไม่ได้"); }
+  });
+
+
+  /* ---------- prices (shown to everyone, edited only from the back office) ---------- */
+  var STATE = { items: [] };
+  if (window.WARI_CONFIG && window.WARI_CONFIG.items) STATE = window.WARI_CONFIG;
+  function money(n) {
+    n = Number(n) || 0;
+    return n.toLocaleString("th-TH", { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 });
+  }
+  function renderPrices() {
+    var ul = $("priceList"); ul.innerHTML = "";
+    STATE.items.forEach(function (it) {
+      var li = document.createElement("li");
+      var a = document.createElement("span"); a.textContent = it.name;
+      var b = document.createElement("span"); b.className = "amt"; b.textContent = "฿" + money(it.price);
+      li.appendChild(a); li.appendChild(b); ul.appendChild(li);
+    });
+    $("priceCard").hidden = STATE.items.length === 0;
+  }
+  renderPrices();
+
+  function renderQr() {
+    var box = $("qrBox");
+    if (!STATE.qr) { box.hidden = true; return; }
+    box.hidden = false; box.innerHTML = ""; box.classList.add("has-img");
+    var im = document.createElement("img");
+    im.src = STATE.qr; im.alt = "คิวอาร์โค้ดทรูวอเล็ต";
+    box.appendChild(im);
+  }
+  renderQr();
+
+})();
+</script>
+
+</body>
+</html>

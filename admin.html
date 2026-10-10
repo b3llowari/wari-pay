@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>หลังร้าน b3llowari.s</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Mali:wght@600;700&display=swap">
+<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">
+<link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>
+<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600&family=Mali:wght@600;700&display=swap\">
+<style>[hidden]{display:none!important}body{margin:0}
+
+/* Layout: one narrow column on a lavender-pink-sky wash. Spinning CD music button pinned top right, symbols fall over the page. */
+:root {
+  --bg: #F1E8FF;
+  --bg-a: #EBDFFF;
+  --bg-b: #FFE3F2;
+  --bg-c: #DDF1FF;
+  --surface: #FFFFFF;
+  --field: #FAF6FF;
+  --ink: #2B1F4A;
+  --muted: #76679A;
+  --line: #E1D3F6;
+  --accent: #8A56E2;
+  --grad-a: #C7A6FF;
+  --grad-b: #FFB0DC;
+  --grad-c: #A6DEFF;
+  --on-grad: #2B1F4A;
+  --grad: linear-gradient(120deg, var(--grad-a), var(--grad-b) 55%, var(--grad-c));
+  --ok: #1B8A63;
+  --bad: #C2264B;
+  --line-green: #06C755;
+  --font-display: "Mali", "Sarabun", "Noto Sans Thai", sans-serif;
+  --font-body: "IBM Plex Sans Thai", "Noto Sans Thai", "Sarabun", system-ui, sans-serif;
+  --font-symbol: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #150F28; --bg-a: #1A1233; --bg-b: #2A1233; --bg-c: #10223A;
+    --surface: #211838; --field: #1A1230; --ink: #F3EBFF; --muted: #B3A2D6;
+    --line: #3A2D5E; --accent: #B58CFF; --ok: #6EE0B0; --bad: #FF8FA3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #150F28; --bg-a: #1A1233; --bg-b: #2A1233; --bg-c: #10223A;
+  --surface: #211838; --field: #1A1230; --ink: #F3EBFF; --muted: #B3A2D6;
+  --line: #3A2D5E; --accent: #B58CFF; --ok: #6EE0B0; --bad: #FF8FA3;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg) linear-gradient(165deg, var(--bg-a) 0%, var(--bg-b) 55%, var(--bg-c) 100%) fixed; color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.6;
+  padding-inline: 16px; padding-block: 28px 40px;
+}
+.wrap { max-width: 480px; margin-inline: auto; display: flex; flex-direction: column; gap: 20px; position: relative; z-index: 1; }
+header { padding-right: 76px; }
+.symbols { margin: 6px 0 0; font-family: var(--font-symbol); font-size: 1.25rem; letter-spacing: .35em; color: var(--accent); }
+h1, h2 { font-family: var(--font-display); margin: 0; text-wrap: balance; }
+h1 { font-size: 1.9rem; line-height: 1.2; }
+h2 { font-size: 1.1rem; }
+.sub { margin: 4px 0 0; color: var(--muted); font-size: .95rem; }
+.only {
+  display: flex; gap: 10px; align-items: center;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 12px 14px; font-weight: 500;
+}
+.only .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--grad); flex: none; }
+.card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+  padding: 18px; display: flex; flex-direction: column; gap: 16px;
+}
+.qr {
+  width: 100%; max-width: 260px; aspect-ratio: 1 / 1; margin-inline: auto;
+  border: 2px dashed var(--line); border-radius: 14px; background: var(--field);
+  display: grid; place-items: center; text-align: center; color: var(--muted);
+  font-size: .9rem; padding: 12px; overflow: hidden;
+}
+.qr.has-img { aspect-ratio: auto; max-width: 300px; border: 0; padding: 0; background: transparent; border-radius: 16px; }
+.qr img { width: 100%; height: auto; display: block; border-radius: 16px; }
+.row {
+  display: flex; align-items: center; gap: 12px; min-width: 0;
+  border-top: 1px solid var(--line); padding-top: 14px;
+}
+.row:first-of-type { border-top: 0; padding-top: 0; }
+.row .txt { flex: 1; min-width: 0; }
+.label { font-size: .8rem; color: var(--muted); letter-spacing: .02em; }
+.value { font-size: 1.15rem; font-weight: 600; overflow-wrap: anywhere; }
+.value.num { font-size: 1.4rem; letter-spacing: .06em; font-variant-numeric: tabular-nums; }
+.icon-btn {
+  flex: none; width: 46px; height: 46px; border-radius: 12px;
+  border: 1px solid var(--line); background: var(--field); color: var(--ink);
+  display: grid; place-items: center; cursor: pointer;
+}
+.icon-btn:hover { border-color: var(--accent); }
+.icon-btn.done { color: var(--ok); border-color: var(--ok); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.field label { font-weight: 500; font-size: .95rem; }
+input[type=text], input[type=number], input[type=datetime-local] {
+  width: 100%; min-width: 0; font: inherit; color: var(--ink);
+  background: var(--field); border: 1px solid var(--line); border-radius: 12px;
+  padding: 12px 14px; min-height: 48px;
+}
+.hint { font-size: .85rem; color: var(--muted); margin: 0; }
+.err { color: var(--bad); font-size: .85rem; margin: 0; min-height: 1.2em; }
+.slip-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  min-height: 52px; border-radius: 12px; border: 1.5px dashed var(--muted);
+  background: var(--field); color: var(--ink); font: inherit; font-weight: 500; cursor: pointer; width: 100%;
+}
+.slip-btn:hover { border-color: var(--accent); }
+.slip-preview { display: none; gap: 12px; align-items: flex-start; }
+.slip-preview.show { display: flex; }
+.slip-preview img { width: 84px; max-height: 150px; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
+.slip-status { font-size: .9rem; margin: 0; }
+.slip-status.ok { color: var(--ok); }
+.slip-status.bad { color: var(--bad); }
+.slip-status.wait { color: var(--muted); }
+.confirm {
+  min-height: 54px; border: 0; border-radius: 14px; font: inherit; font-weight: 600; font-size: 1.05rem;
+  background: var(--grad); color: var(--on-grad); cursor: pointer; width: 100%;
+}
+.confirm:disabled { background: var(--line); color: var(--muted); cursor: not-allowed; }
+.done-box { display: none; flex-direction: column; gap: 12px; }
+.done-box.show { display: flex; }
+.code {
+  font-variant-numeric: tabular-nums; font-weight: 600; font-size: 1.2rem; letter-spacing: .06em;
+  background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; width: fit-content;
+}
+.ghost {
+  min-height: 46px; border-radius: 12px; border: 1px solid var(--line); background: transparent;
+  color: var(--ink); font: inherit; cursor: pointer; padding-inline: 16px; width: fit-content;
+}
+.line-wrap { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding-top: 4px; }
+.line-btn {
+  width: 64px; height: 64px; border-radius: 18px; background: var(--line-green);
+  display: grid; place-items: center; text-decoration: none;
+}
+.toast {
+  position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+  background: var(--ink); color: var(--bg); padding: 10px 16px; border-radius: 999px; font-size: .9rem;
+  opacity: 0; pointer-events: none; transition: opacity .2s; max-width: calc(100% - 32px);
+}
+.toast.show { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+
+/* falling symbols */
+.fall { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+.drop { position: absolute; top: 0; line-height: 1; font-family: var(--font-symbol); color: var(--accent); animation-name: fall; animation-timing-function: linear; animation-fill-mode: forwards; will-change: transform; }
+@keyframes fall {
+  0% { transform: translate3d(0, -8vh, 0) rotate(0deg); opacity: 0; }
+  10% { opacity: .9; }
+  90% { opacity: .9; }
+  100% { transform: translate3d(var(--sway, 0px), 108vh, 0) rotate(var(--spin, 0deg)); opacity: 0; }
+}
+/* CD music button */
+.cd-btn {
+  position: fixed; right: 16px; top: calc(16px + env(safe-area-inset-top, 0px)); z-index: 20;
+  width: 62px; height: 62px; padding: 0; border: 0; border-radius: 50%; background: transparent; cursor: pointer;
+}
+.cd {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: conic-gradient(from 20deg, #C7A6FF, #FFB0DC, #A6DEFF, #FFFFFF, #C7A6FF, #FFB0DC, #A6DEFF, #FFFFFF, #C7A6FF);
+  box-shadow: 0 6px 16px rgba(138, 86, 226, .35), inset 0 0 0 2px rgba(255, 255, 255, .75);
+}
+.cd::before { content: ""; position: absolute; inset: 7%; border-radius: 50%; border: 1px solid rgba(255, 255, 255, .55); }
+.cd::after { content: ""; position: absolute; inset: 35%; border-radius: 50%; background: var(--surface); box-shadow: 0 0 0 5px rgba(255, 255, 255, .45); }
+.cd.spin { animation: spin 3.2s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.cd-badge {
+  position: absolute; left: -6px; bottom: -4px; width: 24px; height: 24px; border-radius: 50%;
+  background: var(--surface); color: var(--accent); border: 1px solid var(--line);
+  display: grid; place-items: center;
+}
+.toast { z-index: 30; }
+@media (prefers-reduced-motion: reduce) { .cd.spin { animation: none; } .drop { display: none; } }
+
+.prices { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.prices li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding-block: 10px; border-top: 1px solid var(--line); min-width: 0; }
+.prices li:first-child { border-top: 0; padding-top: 0; }
+.prices li:last-child { padding-bottom: 0; }
+.prices li > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.amt { font-weight: 600; font-size: 1.2rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.admin-rows { display: flex; flex-direction: column; gap: 10px; }
+.admin-row { display: grid; grid-template-columns: minmax(0, 1fr) 96px 46px; gap: 8px; align-items: center; }
+.admin-row .icon-btn { width: 46px; height: 46px; }
+.qr-preview { display: grid; place-items: center; min-height: 120px; max-width: 260px; margin-inline: auto; width: 100%; color: var(--muted); border: 2px dashed var(--line); border-radius: 14px; background: var(--field); padding: 8px; }
+.qr-preview img { width: 100%; height: auto; display: block; border-radius: 10px; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.admin-link { margin: 0; font-size: .9rem; }
+.stack { display: flex; flex-direction: column; gap: 20px; }
+input[type=password] { width: 100%; min-width: 0; font: inherit; color: var(--ink); background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; min-height: 48px; }
+#pinInput { letter-spacing: .4em; font-size: 1.2rem; }
+.admin-link a { color: var(--accent); }
+body.admin-mode .fall, body.admin-mode .cd-btn { display: none; }
+
+.steps { margin: 0; padding-left: 1.2em; }
+.steps li { margin-block: 2px; }
+</style>
+</head>
+<body class="admin-page">
+<main class="wrap" id="adminView">
+  <header>
+    <h1>หลังร้าน</h1>
+    <p class="sub">b3llowari.s · แก้ราคาและคิวอาร์ของหน้าลูกค้า</p>
+  </header>
+
+  <section class="card" id="pinGate" aria-label="รหัสเข้าหลังร้าน">
+    <h2>ใส่รหัสเข้าหลังร้าน</h2>
+    <div class="field">
+      <label for="pinInput">รหัส 4 หลัก</label>
+      <input type="password" id="pinInput" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="••••">
+      <p class="err" id="pinErr" role="status"></p>
+    </div>
+    <button class="confirm" type="button" id="pinBtn">เข้าหลังร้าน</button>
+  </section>
+
+  <div class="stack" id="adminBody" hidden>
+  <section class="card" aria-label="ราคา">
+    <h2>ราคา</h2>
+    <div class="admin-rows" id="adminRows"></div>
+    <button class="ghost" type="button" id="adminAdd">เพิ่มรายการ</button>
+  </section>
+
+  <section class="card" aria-label="คิวอาร์โค้ด">
+    <h2>คิวอาร์โค้ด</h2>
+    <div class="qr-preview" id="qrPreview"></div>
+    <input type="file" id="qrInput" accept="image/*" hidden>
+    <div class="btn-row">
+      <button class="ghost" type="button" id="qrPick">เลือกรูปคิวอาร์</button>
+      <button class="ghost" type="button" id="qrAuto" hidden>ตัดเหลือเฉพาะคิวอาร์</button>
+      <button class="ghost" type="button" id="qrFull" hidden>ใช้ภาพเต็ม</button>
+      <button class="ghost" type="button" id="qrClear">ลบคิวอาร์</button>
+    </div>
+    <p class="hint">เลือกรูปที่แคปจากแอปทรูมันนี่ ระบบจะตัดเหลือเฉพาะตัวคิวอาร์ให้อัตโนมัติ</p>
+  </section>
+
+  <section class="card" aria-label="เชื่อม GitHub">
+    <h2>เชื่อม GitHub</h2>
+    <p class="hint">ใส่ครั้งเดียว ระบบจะจำไว้ในเครื่องนี้เท่านั้น ใช้บันทึกราคาและคิวอาร์ขึ้นเว็บได้ในคลิกเดียว</p>
+    <div class="field"><label for="ghOwner">ชื่อผู้ใช้ GitHub</label><input type="text" id="ghOwner" autocomplete="off" autocapitalize="none" spellcheck="false"></div>
+    <div class="field"><label for="ghRepo">ชื่อ repository</label><input type="text" id="ghRepo" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="เช่น wari-pay"></div>
+    <div class="field"><label for="ghToken">โทเคน</label><input type="password" id="ghToken" autocomplete="off" placeholder="วางโทเคนที่นี่"></div>
+    <div class="btn-row">
+      <button class="ghost" type="button" id="ghRemember">จำค่านี้ไว้ในเครื่อง</button>
+      <button class="ghost" type="button" id="ghClear">ลบค่าออกจากเครื่อง</button>
+    </div>
+    <p class="hint" id="ghStatus" role="status"></p>
+  </section>
+
+  <button class="confirm" type="button" id="adminSave">บันทึกขึ้นเว็บ</button>
+  <button class="ghost" type="button" id="adminDownload">ดาวน์โหลด config.js แทน</button>
+  <p class="hint">บันทึกขึ้นเว็บแล้วหน้าลูกค้าจะอัปเดตภายใน 1-2 นาที ถ้าไม่ได้เชื่อม GitHub ให้ดาวน์โหลด config.js แล้วอัปโหลดทับเองในหน้า repository (Add file แล้วเลือก Upload files)</p>
+  <p class="hint" id="adminStatus" role="status"></p>
+  </div>
+  <p class="admin-link"><a href="index.html" id="toCustomer">ดูหน้าลูกค้า</a></p>
+</main>
+<script src="config.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var STATE = { items: [], qr: "" };
+  if (window.WARI_CONFIG && window.WARI_CONFIG.items) STATE = window.WARI_CONFIG;
+  var draft = STATE.items.map(function (it) { return { name: it.name, price: it.price }; });
+  var draftQr = STATE.qr || "", qrImg = null;
+  function setAdminStatus(t) { $("adminStatus").textContent = t; }
+
+  var PIN_HASH = "8b31a632b0e3e32ddc1fe4300227bba1dda6f09d89fd6fd47661427839360e6f";
+  var unlockedMem = false;
+  function isUnlocked() { try { return sessionStorage.getItem("wari-unlock") === "1"; } catch (e) { return unlockedMem; } }
+  function syncGate() { var ok = isUnlocked() || unlockedMem; $("pinGate").hidden = ok; $("adminBody").hidden = !ok; }
+  function sha(str) {
+    return crypto.subtle.digest("SHA-256", new TextEncoder().encode(str)).then(function (b) {
+      return Array.prototype.map.call(new Uint8Array(b), function (x) { return ("0" + x.toString(16)).slice(-2); }).join("");
+    });
+  }
+  function tryPin() {
+    var v = $("pinInput").value.trim();
+    if (v.length < 4) { $("pinErr").textContent = "ใส่รหัสให้ครบ 4 หลัก"; return; }
+    sha("wari:" + v).then(function (h) {
+      if (h === PIN_HASH) {
+        unlockedMem = true;
+        try { sessionStorage.setItem("wari-unlock", "1"); } catch (e) {}
+        $("pinInput").value = ""; $("pinErr").textContent = ""; syncGate();
+      } else { $("pinErr").textContent = "รหัสไม่ถูกต้อง"; $("pinInput").value = ""; }
+    }).catch(function () { $("pinErr").textContent = "ตรวจรหัสในเบราว์เซอร์นี้ไม่ได้"; });
+  }
+  $("pinBtn").addEventListener("click", tryPin);
+  $("pinInput").addEventListener("keydown", function (e) { if (e.key === "Enter") tryPin(); });
+  $("pinInput").addEventListener("input", function () { if (this.value.length >= 4) tryPin(); });
+
+  function renderEditor() {
+    var box = $("adminRows"); box.innerHTML = "";
+    draft.forEach(function (it, i) {
+      var row = document.createElement("div"); row.className = "admin-row";
+      var n = document.createElement("input"); n.type = "text"; n.id = "adminName" + i;
+      n.value = it.name; n.setAttribute("aria-label", "ชื่อรายการ"); n.placeholder = "ชื่อรายการ";
+      n.addEventListener("input", function () { draft[i].name = n.value; });
+      var p = document.createElement("input"); p.type = "number"; p.id = "adminPrice" + i;
+      p.inputMode = "decimal"; p.min = "0"; p.step = "any";
+      p.value = it.price; p.setAttribute("aria-label", "ราคา (บาท)"); p.placeholder = "ราคา";
+      p.addEventListener("input", function () { draft[i].price = p.value; });
+      var d = document.createElement("button"); d.type = "button"; d.className = "icon-btn";
+      d.setAttribute("aria-label", "ลบรายการ");
+      d.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+      d.addEventListener("click", function () { draft.splice(i, 1); renderEditor(); });
+      row.appendChild(n); row.appendChild(p); row.appendChild(d); box.appendChild(row);
+    });
+  }
+  $("adminAdd").addEventListener("click", function () {
+    draft.push({ name: "", price: "" }); renderEditor();
+    var last = $("adminName" + (draft.length - 1)); if (last) last.focus();
+  });
+
+  /* QR editor */
+  function renderQrPreview() {
+    var box = $("qrPreview"); box.innerHTML = "";
+    if (draftQr) {
+      var im = document.createElement("img"); im.src = draftQr; im.alt = "ตัวอย่างคิวอาร์";
+      box.appendChild(im);
+    } else { box.textContent = "ยังไม่มีคิวอาร์"; }
+    $("qrAuto").hidden = !qrImg; $("qrFull").hidden = !qrImg;
+  }
+  function dark(d, i) { return d[i] < 80 && d[i + 1] < 80 && d[i + 2] < 80; }
+  function findQr(g, w, h) {
+    var d = g.getImageData(0, 0, w, h).data, rows = new Array(h), x, y;
+    for (y = 0; y < h; y++) { rows[y] = 0; for (x = 0; x < w; x++) { if (dark(d, (y * w + x) * 4)) rows[y]++; } }
+    var thr = Math.max(3, w * 0.01), best = null, start = -1, gap = 0, last = -1;
+    for (y = 0; y <= h; y++) {
+      var on = y < h && rows[y] >= thr;
+      if (on) { if (start < 0) start = y; gap = 0; last = y; }
+      else if (start >= 0) {
+        gap++;
+        if (gap > 4 || y === h) {
+          if (!best || (last - start) > (best.e - best.s)) best = { s: start, e: last };
+          start = -1; gap = 0;
+        }
+      }
+    }
+    if (!best || best.e - best.s < h * 0.15) return null;
+    var cols = new Array(w);
+    for (x = 0; x < w; x++) cols[x] = 0;
+    for (y = best.s; y <= best.e; y++) for (x = 0; x < w; x++) { if (dark(d, (y * w + x) * 4)) cols[x]++; }
+    var x0 = -1, x1 = -1;
+    for (x = 0; x < w; x++) if (cols[x] >= 2) { if (x0 < 0) x0 = x; x1 = x; }
+    if (x0 < 0) return null;
+    var bw = x1 - x0 + 1, bh = best.e - best.s + 1;
+    var side = Math.max(bw, bh); side += Math.round(side * 0.16);
+    return { x: Math.round(x0 + bw / 2 - side / 2), y: Math.round(best.s + bh / 2 - side / 2), w: side, h: side };
+  }
+  function qrToDataUrl(img, mode) {
+    var sc = Math.min(1, 1000 / Math.max(img.naturalWidth, img.naturalHeight));
+    var w = Math.round(img.naturalWidth * sc), h = Math.round(img.naturalHeight * sc);
+    var c = document.createElement("canvas"); c.width = w; c.height = h;
+    var g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, w, h); g.drawImage(img, 0, 0, w, h);
+    var box = { x: 0, y: 0, w: w, h: h };
+    if (mode === "auto") { var b = findQr(g, w, h); if (b) box = b; }
+    var s2 = Math.min(1, 700 / Math.max(box.w, box.h));
+    var out = document.createElement("canvas");
+    out.width = Math.round(box.w * s2); out.height = Math.round(box.h * s2);
+    var og = out.getContext("2d"); og.fillStyle = "#fff"; og.fillRect(0, 0, out.width, out.height);
+    og.drawImage(c, box.x, box.y, box.w, box.h, 0, 0, out.width, out.height);
+    return out.toDataURL("image/png");
+  }
+  $("qrPick").addEventListener("click", function () { $("qrInput").click(); });
+  $("qrInput").addEventListener("change", function () {
+    var file = this.files && this.files[0];
+    if (!file) return;
+    if (!/^image\//i.test(file.type)) { setAdminStatus("เลือกไฟล์ภาพเท่านั้น"); return; }
+    var url = URL.createObjectURL(file), img = new Image();
+    img.onload = function () {
+      qrImg = img; draftQr = qrToDataUrl(img, "auto"); renderQrPreview(); setAdminStatus("");
+    };
+    img.onerror = function () { setAdminStatus("เปิดภาพนี้ไม่ได้ ลองรูปอื่น"); };
+    img.src = url;
+  });
+  $("qrAuto").addEventListener("click", function () { if (qrImg) { draftQr = qrToDataUrl(qrImg, "auto"); renderQrPreview(); } });
+  $("qrFull").addEventListener("click", function () { if (qrImg) { draftQr = qrToDataUrl(qrImg, "full"); renderQrPreview(); } });
+  $("qrClear").addEventListener("click", function () { draftQr = ""; qrImg = null; $("qrInput").value = ""; renderQrPreview(); });
+
+
+  function collectItems() {
+    var items = [];
+    for (var i = 0; i < draft.length; i++) {
+      var name = String(draft[i].name).trim();
+      var price = parseFloat(draft[i].price);
+      if (!name && (draft[i].price === "" || draft[i].price == null)) continue;
+      if (!name || !(price >= 0)) { setAdminStatus("กรอกชื่อรายการและราคาให้ครบทุกแถว"); return null; }
+      items.push({ name: name, price: Math.round(price * 100) / 100 });
+    }
+    return items;
+  }
+  function cfgText(items) { return "window.WARI_CONFIG = " + JSON.stringify({ items: items, qr: draftQr }) + ";\n"; }
+
+  $("adminDownload").addEventListener("click", function () {
+    var items = collectItems(); if (!items) return;
+    var blob = new Blob([cfgText(items)], { type: "text/javascript" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "config.js";
+    document.body.appendChild(a); a.click(); a.remove();
+    setAdminStatus("ดาวน์โหลดแล้ว นำไฟล์ config.js ไปอัปโหลดทับใน GitHub");
+  });
+
+  /* GitHub connection (stored only in this browser) */
+  var GH_KEY = "wari-gh";
+  function ghLoad() { try { return JSON.parse(localStorage.getItem(GH_KEY) || "null"); } catch (e) { return null; } }
+  function ghFields() { return { owner: $("ghOwner").value.trim(), repo: $("ghRepo").value.trim(), token: $("ghToken").value.trim() }; }
+  var saved = ghLoad();
+  if (saved) { $("ghOwner").value = saved.owner || ""; $("ghRepo").value = saved.repo || ""; $("ghToken").value = saved.token || ""; }
+  $("ghRemember").addEventListener("click", function () {
+    var f = ghFields();
+    if (!f.owner || !f.repo || !f.token) { $("ghStatus").textContent = "กรอกให้ครบทั้ง 3 ช่อง"; return; }
+    try { localStorage.setItem(GH_KEY, JSON.stringify(f)); $("ghStatus").textContent = "จำค่าไว้ในเครื่องนี้แล้ว"; }
+    catch (e) { $("ghStatus").textContent = "เบราว์เซอร์นี้เก็บค่าไม่ได้ ต้องกรอกใหม่ทุกครั้ง"; }
+  });
+  $("ghClear").addEventListener("click", function () {
+    try { localStorage.removeItem(GH_KEY); } catch (e) {}
+    $("ghOwner").value = ""; $("ghRepo").value = ""; $("ghToken").value = "";
+    $("ghStatus").textContent = "ลบค่าออกจากเครื่องนี้แล้ว";
+  });
+  function toB64(text) {
+    var bytes = new TextEncoder().encode(text), bin = "";
+    for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  }
+  function ghReq(method, url, token, body) {
+    return fetch(url, {
+      method: method,
+      headers: { "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28", "Content-Type": "application/json" },
+      body: body ? JSON.stringify(body) : undefined
+    });
+  }
+  function pushConfig(f, text) {
+    var url = "https://api.github.com/repos/" + encodeURIComponent(f.owner) + "/" + encodeURIComponent(f.repo) + "/contents/config.js";
+    function attempt(retry) {
+      return ghReq("GET", url, f.token).then(function (res) {
+        if (res.status === 404) return { sha: null };
+        if (!res.ok) throw { status: res.status };
+        return res.json().then(function (j) { return { sha: j.sha }; });
+      }).then(function (info) {
+        var body = { message: "อัปเดตราคาและคิวอาร์", content: toB64(text) };
+        if (info.sha) body.sha = info.sha;
+        return ghReq("PUT", url, f.token, body).then(function (res) {
+          if ((res.status === 409 || res.status === 422) && retry) return attempt(false);
+          if (!res.ok) throw { status: res.status };
+          return true;
+        });
+      });
+    }
+    return attempt(true);
+  }
+  $("adminSave").addEventListener("click", function () {
+    var items = collectItems(); if (!items) return;
+    var f = ghFields();
+    if (!f.owner || !f.repo || !f.token) { setAdminStatus("กรอกข้อมูลเชื่อม GitHub ให้ครบก่อน หรือกดดาวน์โหลด config.js แทน"); return; }
+    var btn = $("adminSave"); btn.disabled = true; setAdminStatus("กำลังบันทึกขึ้นเว็บ…");
+    pushConfig(f, cfgText(items)).then(function () {
+      btn.disabled = false; setAdminStatus("บันทึกแล้ว หน้าลูกค้าจะอัปเดตภายใน 1-2 นาที");
+    }, function (err) {
+      btn.disabled = false;
+      var st = err && err.status;
+      setAdminStatus(st === 401 ? "โทเคนไม่ถูกต้องหรือหมดอายุ" :
+        st === 403 ? "โทเคนไม่มีสิทธิ์เขียนไฟล์ใน repository นี้" :
+        st === 404 ? "ไม่พบ repository ตรวจชื่อผู้ใช้และชื่อ repository อีกครั้ง" :
+        st ? "บันทึกไม่สำเร็จ (รหัส " + st + ")" : "เชื่อมต่อ GitHub ไม่ได้ ลองอีกครั้ง");
+    });
+  });
+
+  renderEditor(); renderQrPreview(); syncGate();
+})();
+</script>
+</body>
+</html>
